@@ -1,0 +1,110 @@
+/*Mixins*/
+@mixin box-shadow($shadow...){
+	-moz-box-shadow: $shadow;
+	-webkit-box-shadow: $shadow;
+	box-shadow: $shadow;
+}
+
+@mixin transition($transition...){
+	-webkit-transition: $transition;
+	-moz-transition: $transition;
+	-o-transition: $transition;
+	-ms-transition: $transition;
+	transition: $transition;
+}
+
+@mixin transition-delay($transition-delay...){
+	-webkit-transition: $transition-delay;
+	-moz-transition: $transition-delay;
+	-o-transition: $transition-delay;
+	-ms-transition: $transition-delay;
+	transition: $transition-delay;
+}
+
+// Transform Mixins
+  // Browser Prefixes
+@mixin transform($transforms) {
+	-webkit-transform: $transforms;
+	-moz-transform: $transforms;
+	-ms-transform: $transforms;
+	transform: $transforms;
+}
+
+  // Rotate
+@mixin rotate ($deg) {
+	@include transform(rotate(#{$deg}deg));
+}
+
+  // Scale
+@mixin scale($scale) {
+	@include transform(scale($scale));
+}
+
+  // Translate
+@mixin translate ($x, $y) {
+	@include transform(translate($x, $y));
+}
+@mixin translateX ($x) {
+    @include transform(translateX($x));
+}
+@mixin translateY ($y) {
+    @include transform(translateY($y));
+}
+
+  // Skew
+@mixin skew ($x, $y) {
+	@include transform(skew(#{$x}deg, #{$y}deg));
+}
+
+// Transform Origin
+@mixin transform-origin ($origin) {
+    	-webkit-transform-origin: $origin;
+    	-moz-transform-origin: $origin;
+	-ms-transform-origin: $origin;
+	transform-origin: $origin;
+}
+
+
+@mixin border-radius($borderRadius...){
+-moz-border-radius: $borderRadius;
+-webkit-border-radius: $borderRadius;
+border-radius: $borderRadius;
+}
+
+@mixin vertical-gradient($fromColor, $toColor){
+	 background-image: -webkit-gradient(linear, left top, left bottom, from($fromColor), to($toColor));
+   background-image: -webkit-linear-gradient(top, $fromColor, $toColor);
+   background-image: -o-linear-gradient(top, $fromColor, $toColor);
+   background-image: linear-gradient(to bottom, $fromColor, $toColor);
+}
+
+//Banners for fill-screen with background images Mixins
+@mixin fill-screen-block ($bgImageName, $height) {
+	$url:"../images/slider/#{$bgImageName}.jpg";
+  background: url($url) no-repeat;
+	background-size: cover;
+	background-position: center;
+	position: relative;
+	background-attachment: fixed;
+	height: $height;
+}
+//Button states: active, hover, focus, visited.. Mixins
+@mixin btn-states ($bgColor, $color){
+	background-color: darken($bgColor, 10%);
+	border-color: darken($bgColor, 15%);
+	color:$color;
+}
+
+/*Media Query Mixins */
+@mixin bp-babyBear(){
+	@medai only screen and (max-width: 480px){
+		@content;
+	}
+}
+
+@mixin bp-papaBear(){
+	@medai only screen and (max-width: 1100px){
+		@content;
+	}
+
+}

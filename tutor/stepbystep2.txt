@@ -1,0 +1,160 @@
+WordPress Application Programming Interface
+Creating page in admin dashboard that allow user to customize theme
+
+1. Creating Default Settings Upon Activation the theme
+  function.php:
+    add_action('after_switch_theme', 'tap_activate');
+    include file activate.php
+  create file includes/activate.php
+    define function tap_activate()
+    check WP version:
+      if(version_compare(get_bloginfo('version'), '4.2', '<')):
+        wp_die(__('You must have a minimum version of 4.2 to use this theme.'));
+      endif;
+
+2. Options API (stored in wp_options data table)
+  Create array of options, store it in variable and if false add to wp_options data table under name 'tap_opts':
+    $theme_opts = get_option('tap_opts'); //retrive value of an options if it exist
+      if(!$theme_opts){ //if false it will add it to database
+        $opts = array(
+          'facebook' => '',
+          'twitter'=> '',
+          'linkedin' => '',
+          'codepen' => '',
+          'github' => '',
+          'freecodecamp' => '',
+          'logo_type' => 1,
+          'logo_img' => '',
+          'footer' => ''
+        );
+        add_option('tap_opts', $opts); //adding options named tap_opts with value $opts
+    }
+3. Adding a menu page to WordPress Admin
+  function.php:
+    add_action('admin_menu', 'tap_admin_menu');
+    include file menus.php
+    include file options-page.php
+
+  Create includes/admin/menus.php
+    Define function tap_admin_menu() and
+    Call function add_menu_page($page-title, $menu-title, $capability, $slug, $callback function)
+
+  Create includes/admin/options-page.php
+    Define call back function tap_theme_opts_page() and add styles
+
+4. Enqueueing Styles Scripts in the Admin
+  function.php:
+    add_action('admin_init', 'tap_admin_init');
+    include file init.php
+  Create includes/admin/init.php:
+    Define function tap_admin_init() and
+    call action add_action('admin_enqueue_scripts', 'tap_admin_enqueue')
+    include file enqueue.php
+  Create includes/admin/enqueue.php:
+    Define function tap_admin_enqueue() and
+    register and enqueue styles and scripts: wp_register_style()/wp_enqueue_style();
+    load scripts only if is active Theme options page (slug = tap_theme_opts):
+      if(!isset($_GET['page']) || ($_GET['page'] != 'tap_theme_opts')){
+        return;
+      }
+
+5. Setting Up a Form in the Admin
+  includes/admin/options-page.php:
+    create bootstrap form with nessesery fields and set method to post and action to admin-post.php
+    create hidden field with name "action" and value "tap_save_option" and use "number used once" function for xss protect:
+      <form method="post" action="admin-post.php">
+        <input type="hidden" name="action" value="tap_save_options"/>
+        <?php wp_nonce_field('tap_options_verify'); ?>
+
+6. Saving our settings
+  includes/admin/init.php file:
+    add action hook:   add_action('admin_post_tap_save_options', 'tap_save_options');
+  create process/save-options.php:
+    Define function tap_save_options()
+    Prevent nalicious behavior:
+      1. Check user capanility: if(!current_user_can('edit_theme_options')){
+        wp_die(__('You are not allowed to be on this page!'));
+      }
+      2. check nonce: check_admin_referer('tap_options_verify');
+    Processing form data and save it:
+      grab tap_opts and overriding them:
+      $opts = get_option('tap_opts');
+
+      $opts['facebook']     = sanitize_text_field($_POST['tap_inputfacebook']);
+      $opts['twitter']      = sanitize_text_field($_POST['tap_inputtwitter']);
+      $opts['linkedin']     = sanitize_text_field($_POST['tap_inputlinkedin']);
+      $opts['codepen']      = sanitize_text_field($_POST['tap_inputcodepen']);
+      $opts['github']       = sanitize_text_field($_POST['tap_inputgithub']);
+      $opts['freecodecamp'] = sanitize_text_field($_POST['tap_inputfreecodecamp']);
+      $opts['logo_type']    = absint($_POST['tap_logotype']);
+      $opts['logo_img']     = $_POST['tap_uploadlogoimg'];
+      $opts['footer']       = $_POST['tap_inputfooter'];
+
+   Update fodm data: update_option('tap_opts', $opts);
+   Redirect user back to the Theme Options Setting page and displaying messege about the status of the update:
+    wp_redirect(admin_url('admin.php?page=tap_theme_opts&status=1'));
+    and add after panel-body tag:
+    <?php if(isset($_GET['status']) && $_GET['status'] == 1): ?>
+      <div class="alert alert-success">
+        <?php _e('Successfully Updated!'); ?>
+      </div>
+    <?php endif; ?>
+
+  function.php:
+    include file save-options.php
+
+7. Displaying the updated setting values
+  includes/admin/options-page.php:
+   grab data of tap_opts in variable:
+    $theme_opts = get_option('tap_opts');
+  Set value of each input field to inputed value/key of $theme_opts array:
+    value = "<?php echo($theme_opts['facebook']); ?>">
+    for logotype selecting:
+      <?php echo($theme_opts['logo_type']) == 2 ? 'SELECTED' : ''; ?>><?php _e('Image', 'profilepage')?></option>
+    for footer: <?php echo stripslashes_deep($theme_opts['footer']); ?>
+
+8. Uploading a Logo with the WordPress Media Uploader
+  Create js/options.js:
+  inside jquery initialize function create event handle on button for uploading logo to popup media uploader
+  Setting logo image input field to umage url:
+    frame.on('select', function(){
+      var attachment = frame.state().get('selection').first().toJSON();//object with properties about elected Image
+      $('input[name="tap_uploadlogoimg"]').val(attachment.url);
+    });
+  save-options.php:
+        $opts['logo_img']     = esc_url_raw($_POST['tap_uploadlogoimg']);
+  options-page.php:
+        value = "<?php echo($theme_opts['logo_img']); ?>"
+
+  includes/admin/enqueue.php:
+    register and enqueue script options.js
+    enqueue media uploader module: wp_enqueue_media();
+
+9. Finalizing the front end and using the options API once more
+  header.php:
+  <?php
+  $theme_opts = get_option('tap_opts');
+  ?>
+    for social media links:
+      <?php if(!empty($theme_opts['facebook'])): ?>
+        <li><a href="https://www.facebook.com<?php echo $theme_opts['facebook']; ?>"><i class="fa fa-facebook"></i></a></li>
+      <?php endif;
+      if(!empty($theme_opts['twitter'])): ?>
+
+    for logo:
+    <?php if($theme_opts['logo_type'] == 1): ?>
+        <a class="navbar-brand" href="index.html"><?php bloginfo('name'); ?></a>
+      <?php else:?>
+        <a class="navbar-brand" href="index.html"><img src="<?php echo $theme_opts[logo_img]; ?>"</a>
+    <?php endif; ?>
+
+
+footer.php:
+  <?php
+  $theme_opts = get_option('tap_opts');
+  ?>
+
+  <?php
+   $theme_opts = get_option('tap_opts');
+   echo $theme_opts['footer'];
+  ?>

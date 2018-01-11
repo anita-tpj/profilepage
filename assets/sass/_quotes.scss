@@ -1,0 +1,41 @@
+/*CSS for Quotes app*/
+
+#random-quotes{
+    margin: 5px;
+    border: 5px solid $orange;
+    overflow: hidden;
+    min-height: 256px;
+    
+    h2{
+       text-transform: uppercase;
+       text-align: center;
+       position: relative;
+       font-size: 1.2em;
+       padding: 10px;
+       background: rgba(0, 0, 0, 0.8);
+       margin: 20px 0 0 0;
+    }
+
+    p {
+        padding-right: 0px 10px;
+        text-align: center;
+        font-size: 1em;
+        min-height:100px;
+        max-height:100px;
+        overflow: hidden;
+    }
+
+    footer{
+        padding-left: 10px;
+    }
+
+    .btn-default{
+      margin: 5px 5px 10px 5px;
+      font-size: 14px;
+      border: black;
+
+    }
+    .btn-tweet{
+        float: right;
+    }
+}

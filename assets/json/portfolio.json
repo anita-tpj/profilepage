@@ -1,0 +1,76 @@
+
+[{
+    "image": "images/portfolio-img/portfolio_1.png",
+    "title": "Tribute Page",
+    "description": "FFC Project - Single HTML/CSS/Bootstrap responsive page dedicated to Mendelejev - scientist and inventor of PSE",
+    "link": "https://codepen.io/anita_tpj/full/YNQwLa/",
+    "altText":"tribute page"
+
+},{
+    "image": "images/portfolio-img/portfolio_2.png",
+    "title": "Hometown Website",
+    "description": "Info website about top attractions of town Novi Sad. HTML/CSS/Bootstrap responsive with effects using JavaScript and jQuery library",
+    "link": "#",
+    "altText":"hometown website"
+
+},{
+    "image": "images/portfolio-img/portfolio_3.png",
+    "title": "WP E-commerce Website",
+    "description": "Web shop of handcraft stuff - 'Kojestarija'. WordPress site with Woocommerce for online shop",
+    "link": "http://kojestarija.herobo.com/sr/",
+    "altText":"wp e-commerce website"
+},{
+    "image": "images/portfolio-img/portfolio_4.png",
+    "title": "Random Qoute Machine",
+    "description": "Random famous quotes on button and can be tweeted. Created by JavaScript/JQuery and AJAX",
+    "link": "https://codepen.io/anita_tpj/full/pPEBwy/",
+    "altText":"random qoute machine"
+},{
+    "image": "images/portfolio-img/portfolio_5.png",
+    "title": "Local Weather App",
+    "description": "App that shows current weather for your location and converts it between imperial and metric units. Created by JavaScript/AJAX/JSON",
+    "link": "http://codepen.io/anita_tpj/full/aWprMR/",
+    "altText":"local weather app"
+},{
+    "image": "images/portfolio-img/portfolio_6.png",
+    "title": "Wikipedia Viewer App",
+    "description": "Wikipedia App for searching random articles or searching by your phrases and terms with autocomplete help. Created by JavaScript/JQuery and AJAX",
+    "link": "https://codepen.io/anita_tpj/full/dWRqpP/",
+    "altText":"wikipedia viewer app"
+},{
+    "image": "images/portfolio-img/portfolio_7.png",
+    "title": "Twitchtv JSON API",
+    "description": "API that allows you to see which twitch users are currently streaming, details about what they are streaming and link to the Twitch.tv channel.",
+    "link": "https://codepen.io/anita_tpj/full/VbXQeV/",
+    "altText":"twitch tv app"
+},{
+    "image": "images/portfolio-img/portfolio_8.png",
+    "title": "JavaScript Calculator",
+    "description": "Calculator with additional funxtion like sqrt, pow, round...Created by JavaScript/JQuery and CSS/Saas/SCSS.",
+    "link": "https://codepen.io/anita_tpj/full/RgjVXd/",
+    "altText":"javascript calculator"
+},{
+    "image": "images/portfolio-img/portfolio_9.png",
+    "title": "Colotr Team - Finishing works in construction",
+    "description": "One-scroll page website with responsive design. Created by Bootstrap HTML/CSS/Sass, JavaScript/JQuery",
+    "link": "http://colorteam.rs/",
+    "altText":"Colotr Team - finishing works in construction"
+}, {
+    "image": "images/portfolio-img/portfolio_10.png",
+    "title": "Pomodoro Clock App",
+    "description": "JavaScript/JQuery clock for countdowning of sessions and breaks time. Created by HTML/SCSS/JavaScript/JQuery",
+    "link": "https://codepen.io/anita_tpj/full/QMgEbX/",
+    "altText":"Pomodoro Clock App"
+}, {
+    "image": "images/portfolio-img/portfolio_11.png",
+    "title": "Tic Tac Toe Game",
+    "description": "JavaScript X-O game for playing with other player or computer with scoring of results. Created by HTML/SCSS/JavaScript/JQuery",
+    "link": "https://codepen.io/anita_tpj/full/PKQXee/",
+    "altText":"Tic Tac Toe Game"
+}, {
+    "image": "images/portfolio-img/portfolio_12.png",
+    "title": "Simon Game",
+    "description": "JavaScript Simon says game. Created by HTML/SCSS/JavaScript/JQuery",
+    "link": "https://codepen.io/anita_tpj/full/LzPxOW/",
+    "altText":"Simon Game"
+}]

@@ -1,0 +1,136 @@
+1. Setting up enviroment and installation:
+    Wamp
+    Create database (colation: utf-8-general-ci)
+    Install wordpress
+
+2. Create theme file
+    Create style.css - file header info that describe theme
+    Create index.php
+    Create function.php (//Set up //Includes //Action and filter hooks //Shortcodes)
+
+4. Adding styles and scripts through hooks - Enque scripts and styles
+    function.php:
+      Adding function for action and hook for enqueue scripts and styles:
+          add_action('wp_enqueue_scripts', 'tap_enqueue')//Action and Filter Hooks
+        Include enqueue.php file in functions.php file:
+          include(get_template_directory() . '/includes/front/enqueue.php')//Action and Filter Hooks;
+
+    Create includes/front/enqueue.php and define function 'tap_enqueue':
+      Inform WP - register scripts:
+          styles: wp_register_style('tap_bootstrap', get_template_directory_uri() . '/css/bootstrap.min.css');
+          scripts: wp_register_script('tap_bootstrap', get_template_directory_uri() . '/js/bootstrap.min.js', array(), false, true);
+      Add to page - enqueue scripts:
+          styles: wp_enqueue_script('tap_bootstrap');
+          scripts: wp_enqueue_style('tap_bootstrap');
+
+    Go to index.php:
+      Told to WP where to load scripts:
+          <?php wp_head() ?>; //after title tag
+          <?php wp_footer() ?>; //before closing body tag
+
+5. Adding Dummy content - install plugin FakerPress
+
+6. Adding Menu support and display Menu
+    function.php:
+      add_theme_support('menu') //Set Up
+      include(get_template_directory() . '/includes/setup.php');//Includes
+      add_action('after_setup_theme', 'tap_setup_theme');//Action and Filter Hooks;
+
+    Create includes/setup.php to define 'tap_setup_function' and register menu:
+      register_nav_menu('primar', __('Primary Menu', 'profilepage'));
+
+    Display menu - index.php:
+    <?php wp_nav_menu(array(
+      'theme_location' => 'prymary',
+      'container' => false,
+      'menu_class' => 'nav navbar-nav  navbar-right'
+    ));
+    ?>; //replace static menu_class
+
+7. Creating header and footer:
+    Create header.php and footer.php and place html from index.php
+    Separate header and footer from index.php template
+    Include those files in index.php:
+      header: <?php get_header('v2')?> //if there is headerv2.php
+      footer: <?php get_footer()?>
+
+
+8. Create Widgets Areas
+    function.php:
+      add_action('widgets_init', 'tap_widgets');//Action and Filter Hooks;
+      include(get_template_directory() . '/includes/widgets.php');//Includes
+
+    Create includes/widgets.php to define 'tap_widgets' and register sidebar:
+      register_sidebar(array(
+        'name'  => __('Right Sidebar', 'profilepage'),
+        'id'  => ('tap_rside'),
+        'Description' => 'Right sidebar for blog pages', 'profilepage',
+        'class' => '',
+        'before_widget' => '<div id="%1$s" class="sidebar-module %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>'
+
+      ));
+    Create sidebar.php:
+        <?php
+        if(is_active_sidebar('tap_rside')){
+          dynamic_sidebar('tap_rside');
+        }
+        ?>
+    Remove static sidebar section from index.php template
+    Displaying sidebar - Include sidebar.php in index.php: <?php get_sidebar?>
+
+9. Format Search Widget
+    Create template searchform.php and place html:
+        <form role="search" method="get" class="search-form" action="<?php echo home_url( '/' ); ?>">
+
+              <label>
+                  <div class="input-group">
+                <input type="search" class="form-control"
+                    placeholder="<?php echo esc_attr_x( 'Search …', 'profilepage' ) ?>"
+                    value="<?php echo get_search_query() ?>" name="s"
+                    title="<?php echo esc_attr_x( 'Search for:', 'label' ) ?>" />
+            </label><span class="input-group-btn">
+            <input type="submit" class="btn btn-secondary"
+                value="<?php echo esc_attr_x( 'Search', 'submit button' ) ?>" />
+              </span>
+              </div>
+        </form>
+
+  Add support for HTML5 - function.php:
+    add_theme_support( 'html5', array( 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' ));//Action and Filter Hooks;
+
+10. Loop
+11. Template tags
+12. Pagination
+13. Template Hierarchy
+14. Create Single Post Template
+      Create single.php Pages
+      Copy code from index and place it in single.php
+      Modify loop:
+        Remove link on title
+        Replace the_excerpt() with the_content()
+        Add <?php the_tags(); ?>
+        For too long posts display post on two page:
+          in post admin ad <!--nextpage--> in html code
+          in single.php add function:
+            <?php wp_link_pages(array(
+                'before' => '<p class="text-center">' . __( 'Pages:' ),
+                'after'  => '</p>'));
+            ?>
+      Take nav pagination and place it inside loop and replace with:
+        <nav>
+          <ul class="pagination justify-content-center">
+            <li class="page-item"><?php previous_post_link('%link', '&laquo; %title'); ?></li>
+            <li class="page-item"><?php next_post_link('%link', '%title &raquo;'); ?></li>
+          </ul>
+        </nav>
+
+14. Create Comment Template
+15. Create Page Template
+16. Create 404 Page Template
+17. Create Category Page Template
+17. Create Archive Page Template
+18. Create Search Template
+19. Create Custom Template

@@ -1,0 +1,176 @@
+@import "reset";
+@import "variables";
+@import "mixins";
+@import "portfolio_common";
+@import "portfolio";
+
+/*-----BODY -----*/
+
+body{
+  padding-top: 150px;
+  font-family: $default_font_style;
+  color: $text-color;
+  font-size: 1em;
+  position: relative;
+  background: $black url("../images/body_bg.jpg") center center fixed;
+}
+
+/*HEADER*/
+
+.navbar{
+  margin-bottom: 0px;
+  padding: 15px 15px;
+  @include transition(all 0.2s);
+}
+
+.nav {
+    padding-top: 10px;
+    font-size: 1.1em;
+}
+
+.navbar-toggle{
+  margin-top: 30px;
+}
+
+
+@media only screen and (max-width: 540px){
+  .navbar-header{
+    position: relative;
+  }
+
+  .navbar img{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: 70%;
+  }
+}
+
+.cbp-af-header-shrink{
+  padding-top: 2px;
+  padding-bottom: 2px;
+  opacity: 0.9;
+}
+
+
+/*-----MAIN -----*/
+section{
+  padding-bottom: 40px;
+}
+
+header{
+  h1{
+    background-color: $bg_color;
+    opacity: 0.5;
+    margin-bottom: 30px;
+    padding:30px 0px 20px 0px;
+    font-size: 2em;
+    font-weight: bold;
+    text-shadow: 2px 2px rgb(0,0,0);
+    text-align: center;
+  }
+}
+
+#about{
+  h1{
+    display: none;
+  }
+  p{
+    font-size: 1.2em;
+    line-height: 130%;
+  }
+  img{
+    @include box-shadow(5px 5px 20px rgba(0,0,0,0.5));
+  }
+  .invite{
+    font-weight: bold;
+    font-size: 1.4em;
+  }
+}
+
+@media only screen and (max-width: 767px){
+  #about p{
+      text-align: center;
+    }
+}
+
+.portfolio-item{
+  margin: 0 40px 0 40px;
+}
+
+.img-thumbnail{
+  margin: 0px auto;
+  border-color: $orange;
+  /*box-shadow: rgba(0,0,0,0.5) 10px 10px 50px;*/
+}
+.img-responsive{
+  margin: 0px auto;
+}
+
+/*CONTACT*/
+
+/*Form*/
+form{
+  max-width: 500px;
+  margin: 0px auto;
+}
+
+form{
+  .btn{
+    margin: 10px 0 10px 0;
+    padding: 5px 40px;
+  }
+  .btn.focus, .btn:focus, .btn:hover, .btn.active, .btn:active, .btn:active:focus{
+  outline:0
+  }
+}
+
+
+.form-control {
+  @include box-shadow(2px 2px 10px #000000);
+  @include border-radius(3px) ;
+    &:focus{
+        border-color: $orange;
+      }
+}
+
+.has-error .control-label,
+.has-error .help-block,
+.has-error .radio{
+
+	color: $error_color;
+}
+
+ /*Socialize*/
+
+.btn-short{
+  opacity: 0.7;
+  @include box-shadow(2px 2px 5px #000000);
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+
+/*QUOTES*/
+
+@import "quotes";
+
+/*FOOTER*/
+
+footer{
+  clear: both;
+	font-size: .8em;
+	text-align: center;
+	padding: 2em 0 .6em 0;
+	color: $footer_text_color;
+  background-color: $bg_color;
+	font-weight: bold;
+}
+
+/*----- OTHER -----*/
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}

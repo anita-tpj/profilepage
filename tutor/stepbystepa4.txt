@@ -1,0 +1,71 @@
+[Advanced Wordpress Theme Development]
+1. WordPress Coding Standards Overview
+2. Child Themes
+3. Diving Deep into the Shortcodes API
+4. Using the WP_Query Class:
+    Create archive-project.php
+    Copy code from index.php
+    Add title Projects
+    Modify loop with:
+      $query = new WP_Query(array(
+        'post_type' => 'project',
+        'posts_per_page' => 3,
+        'orderby' => 'rand'
+      ));
+
+      if($query->have_posts()):
+        while($query->have_posts()):
+          $query->the_post();
+          ?>
+     Before ending loop call function wp_reset_postdata()
+
+
+5. Difference between get and non get
+    get -> return
+    non get ->echo
+
+6. Theme Customizer API
+    function.php:
+      add_action('customize_register', 'tap_customize_register');
+      include file includes/theme-customizer.php
+      add_action('wp_head', 'tap_head');
+      include file includes/front/head.php
+
+    Create file includes/theme-customizer.php:
+      define function tap_customize_register($wp_customize);
+      call add_settings, add_section and add_control method
+
+    Create file includes/front/head.php:
+      define function tap_head()
+      place css style and call get_theme_mod('header_bg_color', '#000000')
+
+
+7. Supporting Various Post Formats
+  function.php:
+    add_theme_support('post-formats', array('link', 'quote', 'aside', 'gallery'));
+  create partial/content.php:
+  place code between while and and endwhile loop from index.php and modify for single page and
+  index.php, single.php, archive.php, category.php: code between while and and endwhile loop replace with:
+    <?php get_template_part('partial/content', get_post_format()); ?>
+
+  create partial/content-page.php
+  create partial/content-search.php
+  search.php, category.php:
+    code between while and and endwhile loop replace with:
+    <?php get_template_part('partial/content', 'search/category'); ?
+
+  create partial/content-aside.php,
+  create partial/content-quote.php,
+  create partial/content-gallery.php,
+  create partial/content-aside.php:
+    place code between while and and endwhile loop from index.php and modify for desired page
+
+8. Creating a Contact Form by Requiring a Plugin
+  download class http://tgmpluginactivation.com/download/ - check if user have installed required plugin if not give warning recommandation
+  create folder includes/libs and paste here file class-tgm-plugin-activation.php
+  include this file from function.php
+  add hook in function.php: add_action( 'tgmpa_register', 'tap_register_required_plugins' );
+  create file includes/register-plugins.php:
+    define function: tap_register_required_plugins()
+    set arrray for plugins and config variable and call function: tgmpa($plugin, $config);//ima uputstvo example.php
+    include this file from function.php

@@ -1,0 +1,15 @@
+
+# HTID:1099199: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
+php_value display_errors 1
+# DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:1099199:
+
+
+## EXPIRES CACHING ##
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+Header set Cache-Control "max-age=1209600, public"
+</FilesMatch>
+
+<FilesMatch "\.(json)$">
+Header set Cache-Control "max-age=0, public"
+</FilesMatch>
+## EXPIRES CACHING ##

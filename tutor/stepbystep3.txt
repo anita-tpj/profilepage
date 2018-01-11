@@ -1,0 +1,221 @@
+Basic Wordpress Plugin Development
+
+1. wp-config.php: define('WP_DEBUG', true);
+2. Creating a Plugin File Header
+  Create folder for plugin inside wp-content/plugins folder
+  Create file wp-content/plugins/projects/index.php or projects.php:
+    Create file header and define properties inside comment
+
+3. Activating Our Plugin
+  index.php:
+  call hook:
+    register_activation_hook(_FILE_, p_activate_plugin);
+    include file activate.php
+
+  Create folder/file: project/includes/activate.php:
+    Define function p_activate_plugin()
+      Check for version requirements:
+      if(version_compare(get_bloginfo('version'), '4.2', '<')):
+        wp_die(__('You must update WordPress to use this plugin.', 'project'));
+      endif;
+ Activate plugin in admin
+
+4. 1 Simple Trick to Secure a Plugin
+    index.php:
+    //Setup
+    if(!function_exists('add_action')):
+      echo "Not allowed!";
+      exit();
+      endif;
+
+5.  Creating a Custom Post Type
+  index.php:
+    add action hook : add_action('init', 'project_init');
+    include file includes/init.php
+  Create file includes/init.php:
+    Define function project_init()
+    Provide arguments for register post type function:
+    register_post_type( $post_type, $args )
+    //'rewrite'            => array( 'slug' => 'project' ), not work for me but false work
+    Call function register_post_type( 'project', $args );
+
+6. Metadata and Metaboxes
+  index.php:
+    Call action hook add_action('admin_init', 'project_admin_init')
+    include file includes/admin/init.php
+  Create file includes/admin/init.php:
+    define function project_admin_init()
+    use the hook for adding metaboxes: add_action('admin_meta_boxes_project', 'p_create_metaboxes')
+    include file create-metaboxes.php
+    Include file project-options.php
+  Create includes/admin/create-metaboxes.php:
+    define function p_create_metaboxes()
+    inside this function call add_meta_box() with desired parametars and callback function p_project_options_mb
+ Create admin/project-options.php:
+  define function p_project_options_mb()
+
+
+7. Enqueueing Files
+    Create assets/css folder inside plugin folder
+      Add bootstrap.css inside css folder
+    admin/init.php:
+    add hook: add_action('admin_enqueue_scripts', 'p_project_enqueue');
+    Create file admin/enqueue.php:
+      define function p_project_enqueue()
+      check if post type user on is project:
+      global $typenow;
+      if($typenow != project){
+        return;
+      }
+      register style and enqueue style:
+      wp_register_style('p_bootstrap', plugins_url('/assets/css/bootstrap.min.css', PROJECT_PLUGIN_URL));
+      wp_enqueue_style('p_bootstrap');
+
+    Create constant for plugin folder for define parent directory on which $path will be relative to in index.php:
+      define('PROJECT_PLUGIN_URL', __FILE__);
+    admin/init.php:
+      Include enqueue.php file
+
+8. Working with Meta Data
+  admin/project-options.php:
+    place html code for input fields inside p_project_options_mb() function
+  index.php:
+    add action hook for saving project options
+      add_action('save_post_project', 'p_save_post_admin', 10, 3);
+    include file process/save-post.php
+  Create process/save-post.php inside project plugin folder:
+    define function p_save_post_admin()
+    if $update is false return function
+    create array $project_data for projec optionst inputed value
+    update and save data: update_post_meta($post_id, 'project_data', $project_data);
+
+  project-options.php:
+    create varable and grab values with function: $project_data = get_post_meta($post->ID, 'project_data', true );
+    define default values for field:
+    if(!$project_data){
+      $project_data = array(
+        'type' => '',
+        'technologies'=> '',
+        'duration'=>'',
+        'role' => 'Developer',
+        'skillLevel' => 'Medior',
+      );
+    }
+
+9. Filter Hooks
+  index.php:
+    call filter hook for adding project data above the content of post:
+      add_filter('the_content', 'p_filter_project_content');
+      include file filter-content.php
+  create process/filter-content.php:
+    define function function p_filter_project_content($content)
+    check if it is singular post and it is projec type post:
+    if(!is_singular('project')){
+      return $content;
+    }
+    grab project-template.php file:
+      $project_html = file_get_contents('project-template.php', true)
+    replace placeholder with our data:
+      $project_data = get_post_meta($post->ID, 'project_data', true);
+      $project_html = str_ireplace('PROJECT_TYPE_PH', $project_data['type'], $project_html);
+  create process/project-template.php:
+    create html for displaying project data
+
+10.  Making our Strings Translatable
+  project-template.php:
+    replace strings  Project Type with PROJECT_TYPE_I18N:
+  filter-content.php:
+    put translatebale version into replace_str function
+      $project_html = str_replace('PROJECT_TYPE_I18N', __('Project Type', 'project'), $project_html);
+
+11. Creating Database Tables
+  Create table in PHPMyAdmin MySQL DB: tapp_project_raitings
+  export fajl and copy query which create table and delete table in phpMyadmin
+  Creatring table through plugin in activate.php and via function dbDelata($createSQL);
+
+12. Including the jQuery Rating Plugin
+https://github.com/gjunge/rateit.js
+create includes/front/enqueue.php:
+register and enqueue files assets/rateit/script/jquery.rateit.min.js and rateit.css and assets/scripts/main.js
+include and enqueue from index.php
+
+
+13. Sending AJAX Requests from the Front End
+  main.js - place the code
+  front/enqueue script:
+  wp_localize_script('p_main', 'project_obj', array(
+    "ajax_url" => admin_url('admin-ajax.php')
+  ));
+  index.php:
+    add_action('wp_ajax_p_rate_project', 'p_rate_project' );
+    include file process/rate-project.php
+  create process/rate-project.php:
+    define function p_rate_project()
+
+14. Handling AJAX Requests and Inserting Data into the Database
+  process/rate-project.php
+
+15. Averaging and Displaying the Rating
+
+16.  Changing the Custom Post Types Table Columns
+
+17. Creating a Widget
+  index.php:
+    add_action('widget_init', 'p_widget_init');
+    include file widgets.php: include(dirname(PROJECT_PLUGIN_URL) . '/includes/widgets.php');
+
+  create includes/widgets.php:
+    define function p_widgets.php()
+    call register function with class: register_widget('P_Daily_Project_Widget');
+  create widget folder inside includes folder
+  create file widgets/daily-project.php:
+    include this file from index.php
+    create class: P_Daily_Project_Widget
+
+18. Cron Jobs
+  includes/activate.php:
+      wp_schedule_event(time(), 'daily', 'p_daily_project_hook');
+  index.php:
+    add_action('p_daily_project_hook', 'p_generate_daily_project');
+
+  create file includes/cron.php:
+    define function p_generate_daily_project()
+    include this file from index.php
+  add hook to index.php:
+    register_deactivation_hook(__FILE__,'p_deactivate_plugin');
+
+  create file includes/deactivate.php
+    define function p_deactivate_plugin()
+    include yhis file from index.php
+    call wp_clear_scheduled_hooks('p_daily_project_hook');
+
+19. Transients API
+      includes/cron.php:
+
+20.  Finalizing our Widget
+  widgets/daily-project.php:
+
+21. Creating a Shortcode
+  index.php:
+    add_shortcode('project_creator', 'p_project_creator_shortcode');
+  create file includes/shortcodes/creatro.php:
+    define function p_project_creator_shortcode()
+    include this file from index.php
+
+  create file includes/shortcodes/creatror-template.php:
+    place html code for form
+    enqueue bootstrap if nessesery(if theme does not enqueue it allready)
+
+22. Including the WordPress Content Editor
+  includes/shortcodes/creatror-template.php:
+    put placeholder for content editor: CONTENT_EDITOR
+  includes/shortcodes/creatror.php:
+    define variables and functions
+
+23. Sanitizing HTML Input and Inserting a Post
+  main.js:
+
+
+24. Extending our Plugin with the Plugin API
+
+25. Sending an E-mail with our Custom Hook

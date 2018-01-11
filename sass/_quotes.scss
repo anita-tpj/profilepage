@@ -1,0 +1,30 @@
+/*CSS for Quotes app*/
+
+#random-quotes{
+    p {
+        padding: 10px 10px;
+        text-align: center;
+        font-size: 1em;
+        line-height: 1.5;
+        min-height:150px;
+        max-height:150px;
+        overflow: hidden;
+    }
+
+    footer{
+        padding: 5px;
+    }
+
+    .btn-default{
+      margin: 15px 5px 10px 5px;
+      font-size: 14px;
+      border: black;
+
+    }
+    .btn-tweet{
+        float: right;
+    }
+    .fa-quote-right{
+      padding-right: 5px;
+    }
+}

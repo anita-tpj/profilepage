@@ -1,0 +1,18 @@
+Custom Post Format gallery
+Custom Post Format with metaboxes
+Custom Post Type
+Style contact form
+
+/*Create custom sidebar and apply on different pages*/
+Create css for link, aside custom post format
+Check search template
+
+*Background color and logo support srediti*
+Header background color and image customize
+
+Left and Both sidebar
+
+Style single.php
+Carosel
+Custom taxonomies widget
+404
